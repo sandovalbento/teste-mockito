@@ -17,4 +17,9 @@ public class ResourcesExceptionHandler {
         Error error =  new Error(LocalDateTime.now(), HttpStatus.NOT_FOUND.value(), ex.getMessage(), request.getRequestURI());
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
+    @ExceptionHandler(DataIntegrationViolationException.class)
+    public ResponseEntity<Error> dataIntegrationViolationException(DataIntegrationViolationException ex, HttpServletRequest request){
+        Error error =  new Error(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(), ex.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    }
 }
