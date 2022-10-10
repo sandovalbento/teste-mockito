@@ -2,6 +2,7 @@ package br.com.api.mockito.services;
 
 import br.com.api.mockito.dto.UserDTO;
 import br.com.api.mockito.entity.User;
+import br.com.api.mockito.exceptions.NotfoundException;
 import br.com.api.mockito.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.Optional;
 
@@ -48,6 +50,18 @@ class UserServiceTest {
         assertEquals(1, response.getId());
         assertEquals("Sandoval", response.getName());
         assertEquals("sandovalbento@gmail.com", response.getEmail());
+    }
+
+    @Test
+    void findByIdObjectNotFound(){
+        when(userRepository.findById(anyInt())).thenThrow(new NotfoundException("Objeto não encontrado"));
+        try {
+            userService.findById(1);
+        }catch (Exception ex){
+            assertEquals(NotfoundException.class, ex.getClass());
+            assertEquals("Objeto não encontrado", ex.getMessage());
+        }
+
     }
 
     @Test
