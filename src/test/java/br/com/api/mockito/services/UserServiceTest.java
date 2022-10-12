@@ -14,10 +14,11 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 class UserServiceTest {
@@ -31,6 +32,7 @@ class UserServiceTest {
     @Mock
     private ModelMapper mapper;
 
+    private User user;
     private UserDTO userDTO;
     private Optional<User> optionalUser;
 
@@ -66,6 +68,17 @@ class UserServiceTest {
 
     @Test
     void findAll() {
+        when(userRepository.findAll()).thenReturn(List.of(user));
+        when(mapper.map(any(), any())).thenReturn(userDTO);
+
+        List<User> response = userService.findAll();
+
+        assertNotNull(response);
+        assertEquals(1,response.size());
+        assertEquals(User.class, response.get(0).getClass());
+        assertEquals("Sandoval", response.get(0).getName());
+        assertEquals("sandovalbento@gmail.com", response.get(0).getEmail());
+        assertEquals("1234", response.get(0).getPassword());
     }
 
     @Test
@@ -81,7 +94,7 @@ class UserServiceTest {
     }
 
     private void startUser(){
-        User user = new User(1, "Sandoval", "sandovalbento@gmail.com", "1234");
+        user = new User(1, "Sandoval", "sandovalbento@gmail.com", "1234");
         userDTO = new UserDTO(1, "Sandoval", "sandovalbento@gmail.com", "1234");
         optionalUser = Optional.of( new User(1, "Sandoval", "sandovalbento@gmail.com", "1234"));
 
