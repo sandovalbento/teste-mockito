@@ -14,6 +14,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -83,6 +84,16 @@ class UserServiceTest {
 
     @Test
     void create() {
+        when(userRepository.save(any())).thenReturn(user);
+        when(userRepository.findByEmail("sandovalbento@gmail.com")).thenReturn(optionalUser);
+        User response = userService.create(userDTO);
+
+        assertNotNull(response);
+        assertEquals(User.class, response.getClass());
+        assertEquals("Sandoval", response.getName());
+        assertEquals("sandovalbento@gmail.com", response.getEmail());
+        assertEquals("1234", response.getPassword());
+
     }
 
     @Test
