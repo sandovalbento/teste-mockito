@@ -156,7 +156,7 @@ class UserServiceTest {
     private void startUser(){
         user = new User(1, "Sandoval", "sandovalbento@gmail.com", "1234");
         userDTO = new UserDTO(1, "Sandoval", "sandovalbento@gmail.com", "1234");
-        optionalUser = Optional.of( new User(1, "Sandoval", "teste@gmail.com", "1234"));
+        optionalUser = Optional.of( new User(1, "Sandoval", "sandovalbento@gmail.com", "1234"));
 
     }
 }
